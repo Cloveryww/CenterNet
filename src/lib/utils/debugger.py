@@ -43,6 +43,8 @@ class Debugger(object):
         (255, 0, 0), (0, 0, 255)]
     elif num_classes == 80 or dataset == 'coco':
       self.names = coco_class_name
+    elif num_classes == 16 or dataset == 'coco_bill':
+      self.names = coco_bill_class_name
     elif num_classes == 20 or dataset == 'pascal':
       self.names = pascal_class_name
     elif dataset == 'gta':
@@ -455,6 +457,8 @@ coco_class_name = [
      'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase',
      'scissors', 'teddy bear', 'hair drier', 'toothbrush'
 ]
+coco_bill_class_name = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+            '11', '12', '13', '14', '15'] 
 
 color_list = np.array(
         [

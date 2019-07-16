@@ -67,10 +67,15 @@ def prefetch_test(opt):
   time_stats = ['tot', 'load', 'pre', 'net', 'dec', 'post', 'merge']
   avg_time_stats = {t: AverageMeter() for t in time_stats}
   for ind, (img_id, pre_processed_images) in enumerate(data_loader):
+    tictic = time.time()
     ret = detector.run(pre_processed_images)
     results[img_id.numpy().astype(np.int32)[0]] = ret['results']
-    Bar.suffix = '[{0}/{1}]|Tot: {total:} |ETA: {eta:} '.format(
-                   ind, num_iters, total=bar.elapsed_td, eta=bar.eta_td)
+    toctoc =time.time()
+    fps = 1.0/(toctoc-tictic)
+    #Bar.suffix = '[{0}/{1}]|Tot: {total:} |ETA: {eta:} '.format(
+    #               ind, num_iters, total=bar.elapsed_td, eta=bar.eta_td)
+    Bar.suffix = '[{0}/{1}]|Tot: {total:} |ETA: {eta:} |FPS: {fps:}'.format(
+                   ind, num_iters, total=bar.elapsed_td, eta=bar.eta_td,fps=fps)
     for t in avg_time_stats:
       avg_time_stats[t].update(ret[t])
       Bar.suffix = Bar.suffix + '|{} {tm.val:.3f}s ({tm.avg:.3f}s) '.format(
@@ -101,16 +106,20 @@ def test(opt):
     img_id = dataset.images[ind]
     img_info = dataset.coco.loadImgs(ids=[img_id])[0]
     img_path = os.path.join(dataset.img_dir, img_info['file_name'])
-
+    
+    tictic =time.time() 
     if opt.task == 'ddd':
       ret = detector.run(img_path, img_info['calib'])
     else:
       ret = detector.run(img_path)
     
     results[img_id] = ret['results']
-
-    Bar.suffix = '[{0}/{1}]|Tot: {total:} |ETA: {eta:} '.format(
-                   ind, num_iters, total=bar.elapsed_td, eta=bar.eta_td)
+    toctoc =time.time()
+    fps = 1.0/(toctoc-tictic)
+    #Bar.suffix = '[{0}/{1}]|Tot: {total:} |ETA: {eta:} '.format(
+    #               ind, num_iters, total=bar.elapsed_td, eta=bar.eta_td)
+    Bar.suffix = '[{0}/{1}]|Tot: {total:} |ETA: {eta:} |FPS: {fps:}'.format(
+                   ind, num_iters, total=bar.elapsed_td, eta=bar.eta_td,fps=fps)
     for t in avg_time_stats:
       avg_time_stats[t].update(ret[t])
       Bar.suffix = Bar.suffix + '|{} {:.3f} '.format(t, avg_time_stats[t].avg)

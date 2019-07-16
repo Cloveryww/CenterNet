@@ -616,6 +616,7 @@ class DLASeg(nn.Module):
         for param in self.fc.parameters():
             yield param
     '''
+'''
 def dla34up(classes, pretrained_base=None, **kwargs):
     model = DLASeg('dla34', classes, pretrained_base=pretrained_base, **kwargs)
     return model
@@ -636,10 +637,11 @@ def dla169up(classes, pretrained_base=None, **kwargs):
     model = DLASeg('dla169', classes,
                    pretrained_base=pretrained_base, **kwargs)
     return model
-def get_pose_net(num_layers, heads, head_conv=256, down_ratio=4):
-    model = DLASeg('dla{}'.format(num_layers), heads,
+'''
+
+def get_pose_net(num_layers, heads, add_conv=256, down_ratio=4):
+  model = DLASeg('dla{}'.format(num_layers), heads,
                  pretrained=True,
                  down_ratio=down_ratio,
                  head_conv=head_conv)
-
-    return model
+  return model
